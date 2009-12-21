@@ -38,11 +38,12 @@ import Prelude.Unicode ( (≡), (∧), (∘) )
 -- from usb:
 import System.USB.Initialization ( newCtx )
 import System.USB.Enumeration    ( Device, getDevices, deviceDesc )
-import System.USB.Descriptors    ( deviceVendorId, deviceProductId )
-import System.USB.IO.Synchronous ( Size, Timeout )
-
+import System.USB.Descriptors    ( deviceVendorId, deviceProductId
+                                 , endpointMaxPacketSize, maxPacketSize
+                                 )
 -- from usb-safe:
-import System.USB.Safe ( with
+import System.USB.Safe ( getDesc
+                       , with
                        , withDetachedKernelDriver
                        , useActiveConfig
                        , getInterfaces
@@ -58,12 +59,6 @@ import System.USB.Safe ( with
 --------------------------------------------------------------------------------
 -- Program
 --------------------------------------------------------------------------------
-
-nrOfBytesToRead ∷ Size
-nrOfBytesToRead = 80
-
-timeout ∷ Timeout
-timeout = 2000 --ms
 
 main ∷ IO ()
 main = do
@@ -128,6 +123,18 @@ main = do
                 --    only one Interrupt endpoint with an In transfer
                 --    direction. You can get a handle to it using the following:
                 let [interruptInEndp] = getEndpoints altHndl In Interrupt
+
+                -- We specify the number of bytes to read to be a multiple of
+                -- the maximum packet size of the respected endpoint so that an
+                -- 'OverflowException' won't be thrown.
+                let nrOfBytesToRead = 10 * ( maxPacketSize
+                                           $ endpointMaxPacketSize
+                                           $ getDesc interruptInEndp
+                                           )
+
+                -- The timeout in miliseconds specifies the maximum allowed time
+                -- for the read operation. (Use 0 for no timeout)
+                let timeout = 3000
 
                 liftIO $ printf "Reading %i bytes during a maximum of %i ms...\n"
                                 nrOfBytesToRead timeout
