@@ -1,4 +1,5 @@
 {-# LANGUAGE UnicodeSyntax #-}
+{-# LANGUAGE NoImplicitPrelude #-}
 
 --------------------------------------------------------------------------------
 -- |
@@ -20,11 +21,16 @@ module Main where
 --------------------------------------------------------------------------------
 
 -- from base:
+import Prelude       ( fromInteger )
 import System.Exit   ( exitFailure )
-import System.IO     ( hPutStrLn, stderr )
-import Data.List     ( find )
-import Control.Monad ( when )
+import System.IO     ( IO, putStrLn, hPutStrLn, stderr )
+import Data.List     ( map, find, head, unlines )
+import Data.Function ( ($) )
+import Data.Bool     ( Bool )
+import Data.Maybe    ( Maybe(Nothing, Just) )
+import Control.Monad ( (>>=), fail, (>>), when )
 import Text.Printf   ( printf )
+import Text.Show     ( show )
 
 -- from bytestring:
 import qualified Data.ByteString as B ( ByteString, length, unpack )
@@ -33,7 +39,10 @@ import qualified Data.ByteString as B ( ByteString, length, unpack )
 import Control.Monad.Trans ( liftIO )
 
 -- from unicode-symbols:
-import Prelude.Unicode ( (≡), (∧), (∘) )
+import Prelude.Unicode       ( (⋅) )
+import Data.Function.Unicode ( (∘) )
+import Data.Eq.Unicode       ( (≡) )
+import Data.Bool.Unicode     ( (∧) )
 
 -- from usb:
 import System.USB.Initialization ( newCtx )
@@ -127,17 +136,17 @@ main = do
                 -- We specify the number of bytes to read to be a multiple of
                 -- the maximum packet size of the respected endpoint so that an
                 -- 'OverflowException' won't be thrown.
-                let nrOfBytesToRead = 10 * ( maxPacketSize
+                let nrOfBytesToRead = 10 ⋅ ( maxPacketSize
                                            $ endpointMaxPacketSize
                                            $ getDesc interruptInEndp
                                            )
 
-                -- The timeout in miliseconds specifies the maximum allowed time
+                -- The timeout in milliseconds specifies the maximum allowed time
                 -- for the read operation. (Use 0 for no timeout)
                 let timeout = 3000
 
-                liftIO $ printf "Reading %i bytes during a maximum of %i ms...\n"
-                                nrOfBytesToRead timeout
+                _ ← liftIO $ printf "Reading %i bytes during a maximum of %i ms...\n"
+                                    nrOfBytesToRead timeout
 
                 -- 10) Now we are finally able to perform I/O and in this case
                 --     we are only able to read because we have an In endpoint:
@@ -148,7 +157,7 @@ main = do
                 -- The computation returns the bytes that were read in a
                 -- ByteString and an indication if the operation timed out:
                 when timedOut $ liftIO $ putStrLn "Reading timed out!"
-                liftIO $ do printf "Read %i bytes:\n" $ B.length bs
+                liftIO $ do _ ← printf "Read %i bytes:\n" $ B.length bs
                             printBytes bs
 
 -- | Determines if the given device is a 'Microsoft Wheel Mouse Optical'
