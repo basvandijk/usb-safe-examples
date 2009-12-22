@@ -38,7 +38,7 @@ import qualified Data.ByteString as B ( ByteString, length, unpack )
 -- from transformers:
 import Control.Monad.Trans ( liftIO )
 
--- from unicode-symbols:
+-- from base-unicode-symbols:
 import Prelude.Unicode       ( (⋅) )
 import Data.Function.Unicode ( (∘) )
 import Data.Eq.Unicode       ( (≡) )
