@@ -46,7 +46,7 @@ import Data.Bool.Unicode     ( (∧) )
 
 -- from usb:
 import System.USB.Initialization ( newCtx )
-import System.USB.Enumeration    ( Device, getDevices, deviceDesc )
+import System.USB.Enumeration    ( Device, getDevices )
 import System.USB.Descriptors    ( deviceVendorId, deviceProductId
                                  , endpointMaxPacketSize, maxPacketSize
                                  )
@@ -167,7 +167,7 @@ isMSWheelMouseOptical dev = deviceVendorId  devDesc ≡ microsoftVID
     where
       microsoftVID = 0x045e
       msWheelMouseOpticalPID = 0x0040
-      devDesc = deviceDesc dev
+      devDesc = getDesc dev
 
 -- | Print the numerical value of each byte on a new line.
 printBytes ∷ B.ByteString → IO ()
