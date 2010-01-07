@@ -1,5 +1,5 @@
 name:          usb-safe-examples
-version:       0.2
+version:       0.2.0.1
 cabal-version: >=1.6
 build-type:    Simple
 license:       BSD3
@@ -21,6 +21,6 @@ Executable example
   build-depends: base                 >= 4     && < 4.3
                , base-unicode-symbols >= 0.1.1 && < 0.2
                , usb                  == 0.3.*
-               , usb-safe             == 0.4.*
+               , usb-safe             >= 0.4   && < 0.6
                , bytestring           == 0.9.*
                , transformers         >= 0.1.4 && < 0.2
