@@ -35,7 +35,7 @@ import Text.Show     ( show )
 import qualified Data.ByteString as B ( ByteString, length, unpack )
 
 -- from transformers:
-import Control.Monad.Trans ( liftIO )
+import Control.Monad.IO.Class ( liftIO )
 
 -- from base-unicode-symbols:
 import Prelude.Unicode       ( (⋅) )
