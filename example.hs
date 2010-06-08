@@ -51,10 +51,11 @@ import System.USB.Descriptors    ( deviceVendorId, deviceProductId
                                  )
 -- from usb-safe:
 import System.USB.Safe ( getDesc
-                       , with
+                       , withDevice
                        , withDetachedKernelDriver
                        , useActiveConfig
                        , getInterfaces
+                       , withInterface
                        , getAlternates
                        , setAlternate
                        , getEndpoints
@@ -88,7 +89,7 @@ main = do
       --    done in a region. When the region terminates all opened resources
       --    are automatically closed. So now we need to create a region and open
       --    a device in it. Both of these steps can be performed at once with:
-      with dev $ \devHndl →
+      withDevice dev $ \devHndl →
 
         -- 5) My OS has currently loaded a driver for the opened mouse. This
         --    prevents us from doing any I/O with it, so we first need to detach
@@ -113,7 +114,7 @@ main = do
             --    use that interface. Our mouse has only one interface so lets
             --    claim that one. Just as with opening devices we can use the
             --    following to accomplish this:
-            with (head $ getInterfaces confHndl) $ \ifHndl →
+            withInterface (head $ getInterfaces confHndl) $ \ifHndl →
 
               -- 8) Just like a device has one ore more configurations, an
               --    interface has one ore more alternates. Before you can do any
