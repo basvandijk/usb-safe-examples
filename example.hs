@@ -151,8 +151,8 @@ main = do
                 -- 10) Now we are finally able to perform I/O and in this case
                 --     we are only able to read because we have an In endpoint:
                 (bs, timedOut) ← readEndpoint interruptInEndp
-                                              timeout
                                               nrOfBytesToRead
+                                              timeout
 
                 -- The computation returns the bytes that were read in a
                 -- ByteString and an indication if the operation timed out:

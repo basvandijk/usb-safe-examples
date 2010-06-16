@@ -20,7 +20,7 @@ Executable example
   GHC-Options: -Wall
   build-depends: base                 >= 4     && < 4.3
                , base-unicode-symbols >= 0.1.1 && < 0.3
-               , usb                  >= 0.3   && < 0.4
+               , usb                  >= 0.4   && < 0.5
                , usb-safe             >= 0.7   && < 0.8
                , bytestring           >= 0.9   && < 0.10
                , transformers         >= 0.2   && < 0.3
