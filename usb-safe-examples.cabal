@@ -12,8 +12,8 @@ category:      System, Monadic Regions
 synopsis:      Examples that demonstrate how to use the usb-safe library
 
 source-repository head
-  Type:     darcs
-  Location: http://code.haskell.org/~basvandijk/code/usb-safe-examples
+  Type:     git
+  Location: git://github.com/basvandijk/usb-safe-examples.git
 
 Executable example
   main-is: example.hs
