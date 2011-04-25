@@ -7,6 +7,7 @@ license-file:  LICENSE
 copyright:     2009 Bas van Dijk
 author:        Bas van Dijk
 maintainer:    Bas van Dijk <v.dijk.bas@gmail.com>
+bug-reports:   https://github.com/basvandijk/usb-safe-examples/issues
 stability:     experimental
 category:      System, Monadic Regions
 synopsis:      Examples that demonstrate how to use the usb-safe library
