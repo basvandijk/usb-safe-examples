@@ -3,7 +3,7 @@
 --------------------------------------------------------------------------------
 -- |
 -- Module      :  Main
--- Copyright   :  (c) 2009 Bas van Dijk
+-- Copyright   :  (c) 2009-2011 Bas van Dijk
 -- License     :  BSD3 (see the file LICENSE)
 -- Maintainer  :  Bas van Dijk <v.dijk.bas@gmail.com>
 --
@@ -143,7 +143,7 @@ main = do
                                            )
 
                 -- The timeout in milliseconds specifies the maximum allowed time
-                -- for the read operation. (Use 0 for no timeout)
+                -- for the read operation. (Use 'noTimeout' for no timeout)
                 let timeout = 3000
 
                 _ ← liftIO $ printf "Reading %i bytes during a maximum of %i ms...\n"
@@ -151,9 +151,7 @@ main = do
 
                 -- 10) Now we are finally able to perform I/O and in this case
                 --     we are only able to read because we have an In endpoint:
-                (bs, status) ← readEndpoint interruptInEndp
-                                              nrOfBytesToRead
-                                              timeout
+                (bs, status) ← readEndpoint interruptInEndp nrOfBytesToRead timeout
 
                 -- The computation returns the bytes that were read in a
                 -- ByteString and an indication if the operation timed out:
@@ -173,6 +171,3 @@ isMSWheelMouseOptical dev = deviceVendorId  devDesc ≡ microsoftVID
 -- | Print the numerical value of each byte on a new line.
 printBytes ∷ B.ByteString → IO ()
 printBytes = putStrLn ∘ unlines ∘ map show ∘ B.unpack
-
-
--- The End ---------------------------------------------------------------------
