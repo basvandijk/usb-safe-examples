@@ -20,14 +20,13 @@ module Main where
 --------------------------------------------------------------------------------
 
 -- from base:
-import Prelude       ( fromInteger )
 import System.Exit   ( exitFailure )
 import System.IO     ( IO, putStrLn, hPutStrLn, stderr )
 import Data.List     ( map, find, head, unlines )
 import Data.Function ( ($) )
 import Data.Bool     ( Bool )
 import Data.Maybe    ( Maybe(Nothing, Just) )
-import Control.Monad ( (>>=), fail, (>>), when )
+import Control.Monad ( when )
 import Text.Printf   ( printf )
 import Text.Show     ( show )
 
@@ -49,6 +48,8 @@ import System.USB.Enumeration    ( Device, getDevices )
 import System.USB.Descriptors    ( deviceVendorId, deviceProductId
                                  , endpointMaxPacketSize, maxPacketSize
                                  )
+import System.USB.IO             ( Status(TimedOut) )
+
 -- from usb-safe:
 import System.USB.Safe ( getDesc
                        , withDevice
@@ -150,13 +151,13 @@ main = do
 
                 -- 10) Now we are finally able to perform I/O and in this case
                 --     we are only able to read because we have an In endpoint:
-                (bs, timedOut) ← readEndpoint interruptInEndp
+                (bs, status) ← readEndpoint interruptInEndp
                                               nrOfBytesToRead
                                               timeout
 
                 -- The computation returns the bytes that were read in a
                 -- ByteString and an indication if the operation timed out:
-                when timedOut $ liftIO $ putStrLn "Reading timed out!"
+                when (status ≡ TimedOut) $ liftIO $ putStrLn "Reading timed out!"
                 liftIO $ do _ ← printf "Read %i bytes:\n" $ B.length bs
                             printBytes bs
 
